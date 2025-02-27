@@ -8,8 +8,10 @@ const io = new Server(server, { cors: { origin: "*" } });
 
 let rooms = {};
 app.get("/", (req, res) => {
-    res.send("Servidor está rodando no Vercel!");
+    res.send("Servidor está rodando no Render!");
 });
+
+const receivedFiles = {}; // Para armazenar chunks temporariamente
 
 
 io.on("connection", (socket) => {
@@ -35,7 +37,31 @@ io.on("connection", (socket) => {
     });
 
     socket.on("send-file-chunk", ({ roomId, chunk, fileName, last, senderId }) => {
-        socket.to(roomId).emit("receive-file", { fileName, fileData: chunk, senderId });
+        if (!receivedFiles[roomId]) {
+            receivedFiles[roomId] = {};
+        }
+
+        if (!receivedFiles[roomId][fileName]) {
+            receivedFiles[roomId][fileName] = [];
+        }
+
+        // Concatenar os chunks corretamente
+        receivedFiles[roomId][fileName].push(Buffer.from(chunk));
+
+        if (last) {
+            // Montar arquivo final
+            const finalFile = Buffer.concat(receivedFiles[roomId][fileName]);
+
+            // Enviar o arquivo completo para os clientes
+            socket.to(roomId).emit("receive-file", {
+                fileName,
+                fileData: finalFile,
+                senderId
+            });
+
+            // Limpar buffer
+            delete receivedFiles[roomId][fileName];
+        }
     });
 
     socket.on("disconnect", () => {
@@ -53,3 +79,4 @@ io.on("connection", (socket) => {
 server.listen(5000, () => {
     console.log("Servidor rodando na porta 5000");
 });
+
