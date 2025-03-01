@@ -13,7 +13,7 @@ const io = new Server(server, {
 
 let rooms = {};
 app.get("/", (req, res) => {
-    res.send("Servidor está rodando no Vercel!");
+    res.send("Servidor está rodando no Railway!");
 });
 
 const receivedFiles = {}; // Para armazenar chunks temporariamente
