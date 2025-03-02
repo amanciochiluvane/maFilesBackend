@@ -1,14 +1,7 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-const cloudinary = require('cloudinary').v2;
 
-
-cloudinary.config({
-    cloud_name: 'dvetcuxac',
-    api_key: '269513831462676',
-    api_secret: 'TNl7rqCShvXkpToTFm5lA2n3WJs'
-});
 
 const app = express();
 const server = http.createServer(app);
