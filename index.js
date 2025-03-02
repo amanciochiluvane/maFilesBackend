@@ -6,14 +6,14 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { 
     cors: { origin: "*" }, 
-    pingTimeout: 60000,  
+    pingTimeout: 120000,  
     pingInterval: 25000  
 });
 
 
 let rooms = {};
 app.get("/", (req, res) => {
-    res.send("Servidor está rodando no Railway!");
+    res.send("Servidor está rodando no Railway2!");
 });
 
 const receivedFiles = {}; // Para armazenar chunks temporariamente
