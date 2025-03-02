@@ -5,7 +5,8 @@ const { Server } = require("socket.io");
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { 
-    cors: { origin: "*" }, 
+    cors: { origin: "*" },
+    maxHttpBufferSize: 1e8, // 100MB
     pingTimeout: 120000,  
     pingInterval: 25000  
 });
@@ -13,7 +14,7 @@ const io = new Server(server, {
 
 let rooms = {};
 app.get("/", (req, res) => {
-    res.send("Servidor está rodando no Railway2!");
+    res.send("Servidor está rodando no Railway3!");
 });
 
 const receivedFiles = {}; // Para armazenar chunks temporariamente
